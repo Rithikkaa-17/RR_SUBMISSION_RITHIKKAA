@@ -4,7 +4,9 @@ SupeRR Selector Season 2, Round 1 (Rajasthan Royals × Unstop).
 
 An interactive dashboard ranking the **10 most reliable batters and 10 most reliable bowlers under pressure**, built on a Pressure Index that blends win-probability leverage with scoreboard stress.
 
-**Live dashboard:** https://rithikkaa-17.github.io/RR_SUBMISSION_RITHIKKAA/ (once GitHub Pages is enabled)
+## 🔗 Live dashboard
+
+**[https://rithikkaa-17.github.io/RR_SUBMISSION_RITHIKKAA/](https://rithikkaa-17.github.io/RR_SUBMISSION_RITHIKKAA/)**
 
 To view locally, just open `index.html` in a browser; it works offline.
 
@@ -34,8 +36,6 @@ python analysis/rate.py balls2.pkl ratings.pkl
 python analysis/extras.py balls2.pkl ratings.pkl summary.json
 ```
 
-## Publish with GitHub Pages
+## Hosting
 
-1. Create a new **public** repository on GitHub and upload these files (or `git push`).
-2. Repo **Settings → Pages → Build and deployment**: Source = *Deploy from a branch*, Branch = `main`, folder `/ (root)`. Save.
-3. After a minute the dashboard is live at `https://<your-username>.github.io/<repo-name>/`.
+The dashboard is hosted on GitHub Pages from the `main` branch (root folder). Any change pushed to `main` goes live within a minute or two.
