@@ -1,0 +1,7 @@
+# The competition data pack must not be shared or published
+Data Pack/
+*.csv
+*.zip
+*.pkl
+__MACOSX/
+.DS_Store

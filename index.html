@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nerves of Steel · SupeRR Selector S2 · Pressure Dashboard</title>
+<script src="data/chart.umd.js"></script>
+<script src="data/results.js"></script>
+<style>
+:root{--navy:#0A1F44;--navy2:#13306A;--pink:#EA1A85;--gold:#F2B705;--green:#2E7D32;--red:#C8102E;--ink:#1B2333;--muted:#5B6577;--light:#EEF2F8;--line:#D5DCE8}
+*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#F7F9FC}
+header{background:radial-gradient(ellipse at 85% 0%,#3D5FA8 0,transparent 55%),radial-gradient(ellipse at 0% 100%,rgba(234,26,133,.35) 0,transparent 50%),var(--navy);color:#fff;padding:48px 6vw 40px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;right:8vw;top:0;bottom:0;width:120px;background:rgba(201,178,124,.12)}
+.kick{color:var(--gold);letter-spacing:.2em;font-weight:700;font-size:13px}
+h1{font-family:Arial,sans-serif;font-size:clamp(28px,4vw,44px);margin:12px 0 10px;max-width:900px;line-height:1.15}
+header p{max-width:760px;font-size:18px;color:#DDE5F5;margin:0}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:4px;padding:0 6vw;overflow-x:auto}
+nav a{padding:14px 16px;text-decoration:none;color:var(--navy);font-weight:700;white-space:nowrap;border-bottom:3px solid transparent}
+nav a:hover{border-color:var(--pink)}
+main{padding:24px 6vw 60px;max-width:1400px;margin:0 auto}
+section{margin:36px 0}
+h2{font-family:Arial,sans-serif;color:var(--navy);font-size:26px;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:16px}
+.grid{display:grid;gap:16px}
+.k4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi .v{font-family:Arial,sans-serif;font-size:40px;font-weight:700;color:var(--pink)}
+.kpi.dark{background:var(--navy);color:#fff;border-color:var(--navy)}.kpi.dark .v{color:var(--gold)}
+.kpi .l{font-size:14px;margin-top:4px}
+.chartbox{position:relative;height:380px}
+.podium{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:12px}
+.pl{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.ball{flex:none;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;border:2px solid #fff;box-shadow:0 0 0 2px var(--navy)}
+.ball.p{background:var(--pink);box-shadow:0 0 0 2px var(--pink)}
+.pl b{display:block;font-size:16px}.pl span{font-size:13px;color:var(--muted)}
+.tw{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th{background:var(--navy);color:#fff;padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;position:sticky;top:0}
+td{padding:8px;text-align:center;border-top:1px solid var(--line)}
+td.n{text-align:left;font-weight:700}
+tr.top td{background:#FDEAF4}
+.up{color:var(--green);font-weight:700}.dn{color:var(--red);font-weight:700}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+input,select{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
+.toggle button{padding:9px 16px;border:1px solid var(--navy);background:#fff;color:var(--navy);font-weight:700;cursor:pointer}
+.toggle button:first-child{border-radius:8px 0 0 8px}.toggle button:last-child{border-radius:0 8px 8px 0}
+.toggle button.on{background:var(--navy);color:#fff}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px}
+.plan .card h3{margin:0 0 6px;color:var(--navy)}.plan .t{color:var(--pink);font-weight:700;font-size:12px;letter-spacing:.15em;margin-top:10px}
+.plan .p{font-weight:700;font-size:17px;color:var(--navy)}
+.formula{background:var(--navy);color:#fff;border-radius:14px;padding:22px}
+.formula .f{font-size:24px;font-weight:700;margin:6px 0 14px}
+.formula em{color:var(--gold);font-style:normal;font-weight:700}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:12px}
+summary{font-weight:700;color:var(--navy);cursor:pointer}
+footer{color:var(--muted);font-size:13px;padding:20px 6vw 40px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="kick">SUPERR SELECTOR · SEASON 2 · ROUND 1</div>
+  <h1>Nerves of Steel: who delivers when the game is on the line</h1>
+  <p id="lede">Pressure Index built on win probability and scoreboard stress, applied to IPL and T20I matches, 2022–2026.</p>
+</header>
+<nav>
+  <a href="#overview">Overview</a><a href="#pressure">Defining pressure</a><a href="#batters">Batters</a><a href="#bowlers">Bowlers</a><a href="#explorer">Player explorer</a><a href="#rr">RR auction plan</a><a href="#reliability">Reliability</a>
+</nav>
+<main>
+<section id="overview">
+  <h2>The top 10s</h2>
+  <p class="sub">Ranked by Clutch Score. Pink = podium.</p>
+  <div class="grid two">
+    <div><h3 style="color:var(--navy);margin:0 0 10px">Batters</h3><div class="podium" id="podBat"></div></div>
+    <div><h3 style="color:var(--navy);margin:0 0 10px">Bowlers</h3><div class="podium" id="podBowl"></div></div>
+  </div>
+</section>
+
+<section id="pressure">
+  <h2>Defining pressure</h2>
+  <p class="sub">A pressure ball is one in the top 25% of the Pressure Index.</p>
+  <div class="grid k4" id="kpis"></div>
+  <div class="grid two" style="margin-top:16px">
+    <div class="formula">
+      <div style="color:var(--gold);letter-spacing:.15em;font-weight:700;font-size:13px">PRESSURE INDEX (per ball)</div>
+      <div class="f">PI = (0.5 × LI + 0.5 × SSI) × M</div>
+      <p><em>LI · Leverage:</em> expected swing in win probability from the next ball, averaged over realistic outcomes (dot, 1, 2, 4, 6, wicket). Win-probability models are gradient-boosted classifiers with monotonic constraints, cross-validated by match.</p>
+      <p><em>SSI · Scoreboard stress:</em> equal mix of stage of innings, required-rate squeeze, collapse in progress (wickets in last 18 balls) and closeness of contest.</p>
+      <p><em>M · Stakes:</em> ×1.25 in knockouts and finals.</p>
+      <p style="color:#EA1A85;font-weight:700">A pressure ball = top 25% of PI (PI ≥ <span id="thr"></span>).</p>
+      <p style="color:#DDE5F5"><em>Why blend?</em> Leverage alone over-flags calm early overs where the game is still 50:50; stress alone ignores what is at stake. Together they find the balls where the game, and the player, are both on edge.</p>
+    </div>
+    <div class="card"><div class="chartbox"><canvas id="cOver"></canvas></div></div>
+  </div>
+  <details><summary>How the Clutch Score is built</summary>
+    <p><b>35% Pressure impact</b> – win-probability added per 100 pressure balls. <b>25% Runs above expected</b> – vs league average for the same innings, phase, wickets lost and format; a wicket costs 8 runs. <b>15% Lift</b> – pressure output minus own non-pressure output. <b>15% Consistency</b> – share of innings/spells (6+ pressure balls) with positive impact, shrunk to 50% over 3 games. <b>10% Volume</b> – log of pressure balls.</p>
+    <p>Eligibility: 150+ legal pressure balls and played in 2026. Rates shrunk toward the pool mean by 60 balls. Recency weights 2022→2026: 0.6, 0.7, 0.8, 0.9, 1.0. Games involving associates or A-teams weighted 0.6. Each component z-scored, weighted and summed.</p>
+  </details>
+</section>
+
+<section id="batters">
+  <h2>Batters: they accelerate when it matters</h2>
+  <p class="sub">Strike rate under pressure vs normal play, top 10.</p>
+  <div class="grid two">
+    <div class="card"><div class="chartbox" style="height:440px"><canvas id="cBatSR"></canvas></div></div>
+    <div class="card"><div class="chartbox" style="height:440px"><canvas id="cBatSc"></canvas></div></div>
+  </div>
+</section>
+
+<section id="bowlers">
+  <h2>Bowlers: spin squeezes hardest</h2>
+  <p class="sub">Economy under pressure vs normal play, top 10.</p>
+  <div class="grid two">
+    <div class="card"><div class="chartbox" style="height:440px"><canvas id="cBowlEc"></canvas></div></div>
+    <div class="card"><div class="chartbox" style="height:440px"><canvas id="cBowlSc"></canvas></div></div>
+  </div>
+</section>
+
+<section id="explorer">
+  <h2>Player explorer</h2>
+  <p class="sub">Every eligible player. Click a column to sort; top-10 rows highlighted.</p>
+  <div class="controls">
+    <div class="toggle"><button id="tBat" class="on">Batters</button><button id="tBowl">Bowlers</button></div>
+    <input id="q" placeholder="Search player…">
+  </div>
+  <div class="tw" style="max-height:560px"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+</section>
+
+<section id="rr">
+  <h2>RR auction plan</h2>
+  <p class="sub">Gaps = where RR's 2026 players rank in the same model. Availability depends on retentions and releases.</p>
+  <div class="plan">
+    <div class="card"><h3>Death-overs finisher</h3>Hetmyer ranks 74th of 88 pressure batters.<div class="t">TARGET</div><div class="p">Tim David · Shashank Singh</div></div>
+    <div class="card"><h3>Chase anchor at 3–5</h3>Parag 64th, Jurel 58th; Jaiswal (23rd) is RR's best.<div class="t">TARGET</div><div class="p">Shreyas Iyer · Tilak Varma · Klaasen</div></div>
+    <div class="card"><h3>Middle-overs spin squeeze</h3>Bishnoi ranks 63rd of 90; Jadeja (22nd) is the only top-25 RR spinner.<div class="t">TARGET</div><div class="p">Narine · Krunal · Harpreet Brar · Zampa</div></div>
+    <div class="card"><h3>Pressure pace partner for Archer</h3>Archer ranks 75th and Sandeep 81st of 90 pressure bowlers.<div class="t">TARGET</div><div class="p">Josh Hazlewood</div></div>
+  </div>
+</section>
+
+<section id="reliability">
+  <h2>How sure are we?</h2>
+  <p class="sub" id="relsub">Share of 200 bootstrap resamples (matches resampled) in which each player stays top 10.</p>
+  <div class="grid two">
+    <div class="card"><div class="chartbox" style="height:420px"><canvas id="cBootBat"></canvas></div></div>
+    <div class="card"><div class="chartbox" style="height:420px"><canvas id="cBootBowl"></canvas></div></div>
+  </div>
+  <details><summary>Limitations</summary>
+    <ul>
+      <li>First-innings win probability is soft without venue/pitch data (AUC 0.69 vs 0.90 when chasing).</li>
+      <li>Batting position shapes which pressure a player can face; a role-adjusted baseline is next.</li>
+      <li>Fielding and captaincy are not in ball-by-ball data.</li>
+      <li>T20I opposition strength is only coarsely adjusted (associates weighted 0.6).</li>
+      <li>Batter-hand vs bowler-type matchups are not yet used.</li>
+    </ul>
+  </details>
+</section>
+</main>
+<footer>Built from the SupeRR Selector Season 2 data pack (aggregated results only; raw data not included). Analysis: Python · pandas · scikit-learn.</footer>
+
+<script>
+const R = window.RESULTS, S = R.summary;
+const C = {navy:'#0A1F44',pink:'#EA1A85',gold:'#F2B705',grey:'#AAB6CC',muted:'#5B6577'};
+Chart.defaults.font.family = 'Calibri, "Segoe UI", Arial, sans-serif';
+Chart.defaults.color = C.muted;
+const f = (x,d=1)=>Number(x).toFixed(d);
+const short = n => n.replace('Namboori ','');
+const el = (tag, cls, txt) => { const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
+
+// lede
+document.getElementById('lede').textContent =
+  `${short(R.topbat[0].name)} and ${R.topbowl[0].name} top a Pressure Index applied to ${S.n_matches} IPL and T20I matches (2022–2026): the balls we flag are 25% of deliveries but carry ${f(S.wpa_share_pressure,0)}% of all win-probability swing.`;
+
+// podiums
+function podium(id, list, sub){
+  const box=document.getElementById(id);
+  list.forEach((p,i)=>{ const d=el('div','pl'); d.append(el('div','ball'+(i<3?' p':''),i+1));
+    const t=el('div'); t.append(el('b',null,short(p.name)), el('span',null,sub(p))); d.append(t); box.append(d); });
+}
+podium('podBat', R.topbat, p=>`SR ${f(p.SR_p,0)} under pressure · avg ${f(p.Avg_p)}`);
+podium('podBowl', R.topbowl, p=>`Econ ${f(p.Econ_p,2)} under pressure · ${p.wk_p} wkts`);
+
+document.getElementById('thr').textContent=f(S.threshold,2);
+// KPIs
+const L=S.league, kp=document.getElementById('kpis');
+[[`${S.n_matches}`,'matches analysed (IPL + T20I)',0],[`${f(S.wpa_share_pressure,0)}%`,'of all win-probability swing happens on the 25% of balls flagged',1],
+ [`${f(L.wpa_p/L.wpa_n)}×`,'bigger swing per pressure ball than a normal ball',0],[`${f(L.wkt_p)}%`,`wicket rate under pressure vs ${f(L.wkt_n)}% otherwise`,0]]
+ .forEach(([v,l,dk])=>{const c=el('div','card kpi'+(dk?' dark':'')); c.append(el('div','v',v), el('div','l',l)); kp.append(c);});
+
+// over chart
+new Chart(document.getElementById('cOver'),{type:'line',data:{labels:[...Array(20)].map((_,i)=>i+1),datasets:[
+  {label:'1st innings',data:S.share_by_over.inn1,borderColor:C.navy,backgroundColor:C.navy,tension:0,borderWidth:3},
+  {label:'2nd innings (chase)',data:S.share_by_over.inn2,borderColor:C.pink,backgroundColor:C.pink,tension:0,borderWidth:3}]},
+  options:{maintainAspectRatio:false,plugins:{title:{display:true,text:'Share of balls flagged as pressure, by over (%)',color:'#1B2333',font:{size:15}},
+  tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${f(c.parsed.y)}%`}}},scales:{x:{title:{display:true,text:'Over'},grid:{display:false}},y:{min:0,max:50}}}});
+
+// paired bars
+function pair(id, list, a, b, title, max, dec){
+  new Chart(document.getElementById(id),{type:'bar',data:{labels:list.map(p=>short(p.name)),datasets:[
+    {label:'Under pressure',data:list.map(p=>+f(p[a],dec)),backgroundColor:C.pink},{label:'Normal play',data:list.map(p=>+f(p[b],dec)),backgroundColor:C.grey}]},
+    options:{indexAxis:'y',maintainAspectRatio:false,plugins:{title:{display:true,text:title,color:'#1B2333',font:{size:15}}},scales:{x:{min:0,max},y:{grid:{display:false}}}}});
+}
+pair('cBatSR', R.topbat, 'SR_p','SR_n','Strike rate: pressure vs normal',250,0);
+pair('cBowlEc', R.topbowl, 'Econ_p','Econ_n','Economy: pressure vs normal (lower is better)',10,2);
+
+// scatter of pool
+function scatter(id, pool, title){
+  const top=pool.filter(p=>p.top10), rest=pool.filter(p=>!p.top10);
+  const pts = a=>a.map(p=>({x:p.wpa100,y:p.net100,name:short(p.name),rank:p.rank}));
+  new Chart(document.getElementById(id),{type:'scatter',data:{datasets:[
+    {label:'Top 10',data:pts(top),backgroundColor:C.pink,pointRadius:7},{label:'Rest of eligible pool',data:pts(rest),backgroundColor:'rgba(10,31,68,.35)',pointRadius:5}]},
+    options:{maintainAspectRatio:false,plugins:{title:{display:true,text:title,color:'#1B2333',font:{size:15}},
+      tooltip:{callbacks:{label:c=>`#${c.raw.rank} ${c.raw.name} · WPA/100 ${f(c.raw.x,2)} · runs above exp/100 ${f(c.raw.y)}`}}},
+      scales:{x:{title:{display:true,text:'Pressure impact (WPA per 100 pressure balls)'}},y:{title:{display:true,text:'Runs above expected per 100 balls'}}}}});
+}
+scatter('cBatSc', R.bat, 'Impact vs efficiency: all eligible batters');
+scatter('cBowlSc', R.bowl, 'Impact vs efficiency: all eligible bowlers');
+
+// bootstrap
+function boot(id, list, col, title){
+  new Chart(document.getElementById(id),{type:'bar',data:{labels:list.map(p=>short(p.name)),datasets:[{label:'% of resamples in top 10',data:list.map(p=>+f(p.top10,0)),backgroundColor:col}]},
+    options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:title,color:'#1B2333',font:{size:15}}},scales:{x:{min:0,max:100},y:{grid:{display:false}}}}});
+}
+boot('cBootBat', R.topbat, C.navy, 'Batters: % of resamples in top 10');
+boot('cBootBowl', R.topbowl, C.pink, 'Bowlers: % of resamples in top 10');
+document.getElementById('relsub').textContent += ` Split-half check (odd vs even matches): r = ${f(R.split.bat.split_r,2)} batting, ${f(R.split.bowl.split_r,2)} bowling — the signal is real but noisy, hence shrinkage and volume weighting.`;
+
+// explorer
+const COLS = {
+  bat:[['rank','#',0],['name','Batter'],['score','Clutch',2],['p_raw_balls','Press. balls',0],['p_raw_r','Press. runs',0],['SR_p','SR press.',1],['SR_n','SR normal',1],['Avg_p','Avg press.',1],['wpa100','WPA/100',2],['net100','Runs abv exp/100',1],['cons','Consistency',2],['top10_pct','Boot top-10 %',0]],
+  bowl:[['rank','#',0],['name','Bowler'],['score','Clutch',2],['p_raw_balls','Press. balls',0],['p_raw_o','Wkts',0],['Econ_p','Econ press.',2],['Econ_n','Econ normal',2],['SRb_p','Balls/wkt',1],['wpa100','WPA/100',2],['net100','Runs saved/100',1],['cons','Consistency',2],['top10_pct','Boot top-10 %',0]]
+};
+let mode='bat', sortK='rank', asc=true;
+function render(){
+  const cols=COLS[mode], q=document.getElementById('q').value.toLowerCase();
+  const thead=document.querySelector('#tbl thead'), tb=document.querySelector('#tbl tbody');
+  thead.replaceChildren(); tb.replaceChildren();
+  const tr=el('tr'); cols.forEach(([k,l])=>{const th=el('th',null,l+(k===sortK?(asc?' ▲':' ▼'):'')); th.addEventListener('click',()=>{asc = sortK===k? !asc : (k==='rank'||k==='name'||k.startsWith('Econ')); sortK=k; render();}); tr.append(th);}); thead.append(tr);
+  let rows=R[mode].filter(p=>p.name.toLowerCase().includes(q));
+  rows.sort((a,b)=>{const x=a[sortK],y=b[sortK]; return (typeof x==='string'? x.localeCompare(y) : x-y)*(asc?1:-1);});
+  rows.forEach(p=>{const r=el('tr',p.top10?'top':''); cols.forEach(([k,,d])=>{
+    let td; if(k==='name'){td=el('td','n',short(p.name));}
+    else if(k==='cons'){td=el('td',null,f(p[k]*100,0)+'%');}
+    else {td=el('td',null,f(p[k],d));}
+    if(k==='SR_p') td.className = p.SR_p>p.SR_n?'up':'dn';
+    if(k==='Econ_p') td.className = p.Econ_p<p.Econ_n?'up':'dn';
+    r.append(td);}); tb.append(r);});
+}
+document.getElementById('tBat').onclick=()=>{mode='bat';sortK='rank';asc=true;tBat.classList.add('on');tBowl.classList.remove('on');render();};
+document.getElementById('tBowl').onclick=()=>{mode='bowl';sortK='rank';asc=true;tBowl.classList.add('on');tBat.classList.remove('on');render();};
+document.getElementById('q').addEventListener('input',render);
+render();
+</script>
+</body>
+</html>
